@@ -1,0 +1,112 @@
+{
+  "ts-node": {
+    "transpileOnly": true,
+    "require": [
+      "typescript-transform-paths/register"
+    ],
+  },
+  "compilerOptions": {
+    "plugins": [
+      // Transform paths in output .js files
+      {
+        "transform": "typescript-transform-paths"
+      },
+      // Transform paths in output .d.ts files (Include this line if you output declarations files)
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ],
+    "target": "es2022",
+    "module": "commonjs",
+    "lib": [
+      "dom",
+      "es6",
+      "es2017",
+      "esnext.asynciterable"
+    ],
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "baseUrl": "./",
+    "rootDir": "./",
+    "paths": {
+      "@comp326-config": [
+        "./src/config"
+      ],
+      "@comp326-config/*": [
+        "./src/config/*"
+      ],
+      "@comp326-app": [
+        "./src/app"
+      ],
+      "@comp326-app/*": [
+        "./src/app/*"
+      ],
+      "@comp326-common": [
+        "./src/common"
+      ],
+      "@comp326-common/*": [
+        "./src/common/*"
+      ],
+      "@comp326-logger": [
+        "./src/logger"
+      ],
+      "@comp326-logger/*": [
+        "./src/logger/*"
+      ],
+      "@comp326-server": [
+        "./src/server"
+      ],
+      "@comp326-server/*": [
+        "./src/server/*"
+      ],
+      "@comp326-plugins": [
+        "./src/plugins"
+      ],
+      "@comp326-plugins/*": [
+        "./src/plugins/*"
+      ],
+      "@comp326-constants": [
+        "./src/constants"
+      ],
+      "@comp326-constants/*": [
+        "./src/constants/*"
+      ],
+      "@comp326-db": [
+        "./src/db"
+      ],
+      "@comp326-db/*": [
+        "./src/db/*"
+      ],
+      "@comp326-helpers": [
+        "./src/helpers"
+      ],
+      "@comp326-helpers/*": [
+        "./src/helpers/*"
+      ],
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "./src/**/*.ts",
+  ]
+}
