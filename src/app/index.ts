@@ -1,17 +1,17 @@
 import { PluginMiddlewareLoader } from './../plugins/express';
 import express from 'express';
 
-export class App {
+class App {
 	private _app: express.Application;
 
 	private _appName: string;
- 
+
 	private _plugins: PluginMiddlewareLoader;
 
 	private _apiVersion = 1;
 
 	constructor() {
-		this._appName= 'exam-cell-app';
+		this._appName = 'exam-cell-app';
 		this._app = express();
 		this.mountPlugins();
 	}
@@ -24,13 +24,15 @@ export class App {
 
 	public apiVersion = () => this._apiVersion;
 
-
 	private mountPlugins(): void {
 		this._plugins = new PluginMiddlewareLoader({
 			app: this.app(),
-			version: this.apiVersion()
+			version: this.apiVersion(),
 		});
 		this.plugins().loadPlugins();
 	}
-   
 }
+
+const app = new App().app();
+
+export default app;

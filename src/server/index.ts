@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 // eslint-disable-next-line sort-imports
-import { App } from '@comp326-app';
+import  App  from '@comp326-app';
 import chalk from 'chalk';
 import moment from 'moment';
 import { processLogger } from '@comp326-logger';
@@ -8,12 +8,12 @@ import { processLogger } from '@comp326-logger';
 class AppServer {
 	private __server: ReturnType<typeof createServer>;
 
-	private __appName: string;
+	// private __appName: string;
 
 	constructor() {
-		const app = new App();
-		this.__appName = app.appName();
-		this.__server = createServer(app.app());
+		const app =  App;
+		// this.__appName = app.appName();
+		this.__server = createServer(app);
 	}
 
 	protected server = () => this.__server;
@@ -43,11 +43,9 @@ class AppServer {
 	start(port: number) {
 		this.np();
 		const message = JSON.stringify({
-			appName: this.__appName,
 			port: port,
 			message: 'Server started',
-			version: 'v1',
-			date: moment().format('LL'),
+			date: moment().format('LLLL'),
 		});
 		this.server().listen(port, () => {
 			console.info(

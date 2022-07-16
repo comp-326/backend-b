@@ -17,37 +17,34 @@ class Api {
 	constructor() {
 		this._router = Router();
 		this.route();
-
 	}
 
 	public router = () => this._router;
 
 	private registerRoute = (pathName: string, instance: Router) => {
-		if (this.services().includes(pathName)) 
-			return this;
-        
+		if (this.services().includes(pathName)) return this;
+
 		this._services.push(pathName);
 		this.router().use(`/${pathName}/`, instance);
 
 		return this;
-
 	};
 
 	public services = () => this._services;
 
 	public route = () => {
-		this
-			.registerRoute('users', userRoutes.route())
+		this.registerRoute('users', userRoutes.route())
 			.registerRoute('admin', adminRoutes.route())
 			.registerRoute('auth', authRoutes.route())
 			.registerRoute('course', coursesRoutes.route())
 			.registerRoute('department', departmentsRoutes.route())
 			.registerRoute('faculty', facultyRoutes.route())
 			.registerRoute('lecturers', lecturersRoutes.route())
-			.registerRoute('students', studentsRoutes.route())
+			.registerRoute('students', studentsRoutes)
 			.registerRoute('units', unitsRoutes.route());
 	};
-
 }
 
-export default new Api();
+const api = new Api();
+
+export default api;
