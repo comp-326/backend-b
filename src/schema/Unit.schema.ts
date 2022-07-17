@@ -21,6 +21,8 @@ const unitSchema: mongoose.Schema<IUnitDocument> = new mongoose.Schema(
 	{
 		name: { type: String, unique: true },
 		code: { type: String, unique: true, uppercase: true },
+		year: { type: Number, required: true, min: 1, max: 4 },
+		semester: { type: Number, required: true ,min: 1, max: 2},
 		department: { type: mongoose.SchemaTypes.ObjectId, ref: 'department' },
 	},
 	{ timestamps: true },

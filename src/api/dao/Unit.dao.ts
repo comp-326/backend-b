@@ -1,3 +1,4 @@
+import { ExpressError } from '@comp326-common/errors/ExpressError';
 import Unit, { IUnit } from '@comp326-schema/Unit.schema';
 
 class UnitDao {
@@ -10,6 +11,18 @@ class UnitDao {
 	};
 
 	createUnit = async (unit: IUnit) => {
+		const existingUnit = await Unit.findOne({
+			name: unit.name,
+			code: unit.code,
+		});
+		if (existingUnit) {
+			throw new ExpressError({
+				message: 'Unit already exists',
+				statusCode: 400,
+				status: 'warning',
+				data: {},
+			});
+		}
 		const newUnit = await Unit.create(unit);
 
 		return newUnit;
