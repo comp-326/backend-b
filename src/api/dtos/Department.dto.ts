@@ -1,73 +1,68 @@
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 
-export class CourseDto {
+export class DepartmentDto {
 	private _name: string;
 
-	private _code: string;
+	private _cod: string;
 
-	private _department: string;
+	private _faculty: string;
 
-	constructor(
-		name: string,
-		code: string,
-		department: string,
-	) {
+	constructor(name: string, cod: string, faculty: string) {
 		if (!name) {
 			throw new ExpressError({
 				data: {},
-				message: 'Course name required',
+				message: 'Department name required',
 				status: 'error',
 				statusCode: 400,
 			});
 		}
-		if (!code) {
+		if (!cod) {
 			throw new ExpressError({
 				data: {},
-				message: 'Course code required',
+				message: 'Department cod required',
 				status: 'error',
 				statusCode: 400,
 			});
 		}
-		if (!department) {
+		if (!faculty) {
 			throw new ExpressError({
 				data: {},
-				message: 'Department required',
+				message: 'Department faculty required',
 				status: 'error',
 				statusCode: 400,
 			});
 		}
-		if (!validateMongodbId(department)) {
+		if (!validateMongodbId(faculty)) {
 			throw new ExpressError({
 				data: {},
-				message: 'Invalid department id',
+				message: 'Invalid faculty id',
 				status: 'error',
 				statusCode: 400,
 			});
 		}
-		this._department=department;
-		this._name=name;
-		this._code=code;
-		
+		this._name = name;
+		this._cod = cod;
+		this._faculty = faculty;
 	}
 
 	get name() {
 		return this._name;
 	}
 
-	get code() {
-		return this._code;
+	get cod() {
+		return this._cod;
 	}
 
-	get department() {
-		return this._department;
+	get faculty() {
+		return this._faculty;
 	}
 
 	toJSon = () => {
 		return {
 			name: this.name,
-			code: this.code,
-			department: this.department,
+			cod: this.cod,
+			faculty: this.faculty,
 		};
 	};
 }

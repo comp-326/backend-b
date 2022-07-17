@@ -1,7 +1,7 @@
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 
-export class CourseDto {
+export class UnitDto {
 	private _name: string;
 
 	private _code: string;
@@ -16,7 +16,7 @@ export class CourseDto {
 		if (!name) {
 			throw new ExpressError({
 				data: {},
-				message: 'Course name required',
+				message: 'Unit name required',
 				status: 'error',
 				statusCode: 400,
 			});
@@ -24,7 +24,7 @@ export class CourseDto {
 		if (!code) {
 			throw new ExpressError({
 				data: {},
-				message: 'Course code required',
+				message: 'Unit code required',
 				status: 'error',
 				statusCode: 400,
 			});

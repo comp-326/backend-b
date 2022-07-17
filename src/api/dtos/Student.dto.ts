@@ -17,7 +17,7 @@ export class StudentDto {
 		firstName: string,
 		lastName: string,
 		dateOfBirth: Date,
-		regNo: string,
+		regNo = '',
 		course: string,
 	) {
 		if (!course) {
@@ -80,14 +80,6 @@ export class StudentDto {
 			throw new ExpressError({
 				data: {},
 				message: 'Student must be over 18years old',
-				status: 'error',
-				statusCode: 400,
-			});
-		}
-		if (!regNo) {
-			throw new ExpressError({
-				data: {},
-				message: 'Student reg number required',
 				status: 'error',
 				statusCode: 400,
 			});

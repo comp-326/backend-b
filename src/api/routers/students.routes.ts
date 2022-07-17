@@ -7,7 +7,7 @@ class StudentRouter extends BaseRouter {
 		this.router.get('/', studentController.getStudents);
 		this.router.get('/find/:reg', studentController.getStudentByReg);
 		this.router.get('/:id', studentController.getStudentById);
-		this.router.get('/?q', studentController.searchStudent);
+		this.router.get('/q', studentController.searchStudent);
 
 		return this.router;
 	}

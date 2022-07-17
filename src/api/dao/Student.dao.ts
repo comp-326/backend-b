@@ -1,3 +1,6 @@
+import CourseDao from './Course.dao';
+import { ExpressError } from '@comp326-common/errors/ExpressError';
+import { createStudentRegistrationNumber as reg } from '@comp326-helpers/reg-generator/regGenerator';
 import Student, { IStudent } from '@comp326-schema/Student.schema';
 
 class StudentDao {
@@ -10,7 +13,19 @@ class StudentDao {
 	};
 
 	createStudent = async (student: IStudent) => {
-		const newStudent = await Student.create(student);
+		const course = await CourseDao.findCourseById(student.course);
+		if (!course) {
+			throw new ExpressError({
+				message: 'Course not found',
+				statusCode: 404,
+				status: 'warning',
+				data: {},
+			});
+		}
+		const newStudent = await Student.create({
+			...student,
+			regNo: reg(course.code),
+		});
 
 		return newStudent;
 	};
