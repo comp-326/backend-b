@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Get the current date in the format as string
 const getCurrentCode = () => {
 	const date = new Date();
@@ -20,4 +21,14 @@ export const createStaffRegistrationNumber = () => {
 	const regNumber = `staff/${middleCode}/${year}`;
 
 	return regNumber;
+};
+
+export const generateSessionUnitCode = (
+	sessionYear: number,
+	sessionSemester: number,
+	courseCode: string,
+) => {
+	const code = `${courseCode}-Y${sessionYear}-S${sessionSemester}`;
+
+	return code;
 };

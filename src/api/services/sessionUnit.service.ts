@@ -1,23 +1,49 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import CourseDao from '@comp326-api/dao/Course.dao';
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { ISessionUnit } from '@comp326-schema/SessionUnit.schema';
 import SDO from '@comp326-api/dao/SessionUnit.dao';
 import { SessionUnitDto } from '@comp326-api/dtos/SessionUnit.dto';
+import { generateSessionUnitCode as gCode } from '@comp326-helpers/reg-generator/regGenerator';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 
 class SessionUnitService {
 	private _sessionUnitDao = SDO;
 
+	private _courseUnitDao = CourseDao;
+
 	protected get sessionUnitDao() {
 		return this._sessionUnitDao;
 	}
 
+	protected get courseUnitDao() {
+		return this._courseUnitDao;
+	}
+
 	createSessionUnit = async (sessionUnit: ISessionUnit) => {
+		const course = await this.courseUnitDao.findCourseById(
+			sessionUnit.course,
+		);
+		if (!course) {
+			throw new ExpressError({
+				statusCode: 400,
+				message: 'Course not found',
+				status: 'error',
+				data: {},
+			});
+		}
+		sessionUnit.code = gCode(
+			sessionUnit.sessionYear,
+			sessionUnit.sessionSemester,
+			course.code,
+		);
 		const newSessionUnit = new SessionUnitDto(
 			sessionUnit.sessionYear,
 			sessionUnit.sessionSemester,
 			sessionUnit.year,
 			sessionUnit.units,
+			sessionUnit.course,
+			sessionUnit.code,
 		).toJSon();
 		const res = await this.sessionUnitDao.createSessionUnit(newSessionUnit);
 
@@ -36,8 +62,10 @@ class SessionUnitService {
 			new SessionUnitDto(
 				update.sessionYear,
 				update.sessionSemester,
-				update.year,
+				update.sessionYear,
 				update.units,
+				update.course,
+				update.code,
 			).toJSon(),
 		);
 

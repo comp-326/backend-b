@@ -5,6 +5,10 @@ import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 export class SessionUnitDto {
 	private _sessionYear: number;
 
+	private _course: string;
+
+	private _code: string;
+
 	private _sessionSemester: number;
 
 	private _year: number;
@@ -16,6 +20,8 @@ export class SessionUnitDto {
 		sessionSemester: number,
 		year = new Date().getFullYear(),
 		units: any[],
+		course: string,
+		code: string,
 	) {
 		if (units && units.length > 0) {
 			units.forEach((unit) => {
@@ -37,6 +43,22 @@ export class SessionUnitDto {
 				statusCode: 400,
 			});
 		}
+		if (!course) {
+			throw new ExpressError({
+				data: {},
+				message: 'Session course  required',
+				status: 'error',
+				statusCode: 400,
+			});
+		}
+		if (!code) {
+			throw new ExpressError({
+				data: {},
+				message: 'Session code  required',
+				status: 'error',
+				statusCode: 400,
+			});
+		}
 		if (!sessionYear) {
 			throw new ExpressError({
 				data: {},
@@ -49,11 +71,21 @@ export class SessionUnitDto {
 		this._sessionYear = sessionYear;
 		this._sessionSemester = sessionSemester;
 		this._year = year;
+		this._course = course;
 		this._units = units;
+		this._code = code;
 	}
 
 	get sessionYear() {
 		return this._sessionYear;
+	}
+
+	get course() {
+		return this._course;
+	}
+
+	get code() {
+		return this._code;
 	}
 
 	get sessionSemester() {
@@ -73,7 +105,9 @@ export class SessionUnitDto {
 			sessionYear: this.sessionYear,
 			sessionSemester: this.sessionSemester,
 			year: this.year,
+			course: this.course,
 			units: this.units,
+			code: this.code,
 		};
 	};
 }

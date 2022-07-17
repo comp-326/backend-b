@@ -13,7 +13,7 @@ class FacultyService {
 	}
 
 	createFaculty = async (faculty: IFaculty) => {
-		const newFaculty = new FacultyDto(faculty.name, faculty.dean).toJSon();
+		const newFaculty = new FacultyDto(faculty.name/* faculty.dean */).toJSon();
 		const res = await this.facultyDao.createFaculty(newFaculty);
 
 		return res;
@@ -24,7 +24,7 @@ class FacultyService {
 		const update = { ...existingFaculty!, ...faculty };
 		const res = await this.facultyDao.updateFaculty(
 			id,
-			new FacultyDto(update.name, update.dean).toJSon(),
+			new FacultyDto(update.name/* update.dean */).toJSon(),
 		);
 
 		return res;

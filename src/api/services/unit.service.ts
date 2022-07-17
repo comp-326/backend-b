@@ -17,6 +17,8 @@ class UnitService {
 			unit.name,
 			unit.code,
 			unit.department,
+			unit.year,
+			unit.semester,
 		).toJSon();
 		const res = await this.unitDao.createUnit(newUnit);
 
@@ -28,7 +30,13 @@ class UnitService {
 		const update = { ...existingUnit!, ...unit };
 		const res = await this.unitDao.updateUnit(
 			id,
-			new UnitDto(update.name, update.code, update.department).toJSon(),
+			new UnitDto(
+				update.name,
+				update.code,
+				update.department,
+				update.year,
+				update.semester,
+			).toJSon(),
 		);
 
 		return res;

@@ -42,7 +42,7 @@ class Api {
 			.registerRoute('session-units', sessionUnitsRoute)
 			.registerRoute('department', departmentsRoutes)
 			.registerRoute('faculty', facultyRoutes)
-			.registerRoute('lecturers', lecturersRoutes.route())
+			.registerRoute('lecturers', lecturersRoutes)
 			.registerRoute('students', studentsRoutes)
 			.registerRoute('session', studentSessionRoutes)
 			.registerRoute('units', unitsRoutes);

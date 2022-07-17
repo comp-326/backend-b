@@ -15,7 +15,7 @@ class DepartmentService {
 	createDepartment = async (department: IDepartment) => {
 		const newDepartment = new DepartmentDto(
 			department.name,
-			department.cod,
+			// department.cod,
 			department.faculty,
 		).toJSon();
 		const res = await this.departmentDao.createDepartment(newDepartment);
@@ -28,7 +28,7 @@ class DepartmentService {
 		const update = { ...existingDepartment!, ...department };
 		const res = await this.departmentDao.updateDepartment(
 			id,
-			new DepartmentDto(update.name, update.cod, update.faculty).toJSon(),
+			new DepartmentDto(update.name,/* update.cod, */ update.faculty).toJSon(),
 		);
 
 		return res;

@@ -1,37 +1,42 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import moment from 'moment';
+import { createStaffRegistrationNumber as reg } from '@comp326-helpers/reg-generator/regGenerator';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 
-export class StudentDto {
+export class LecturerDto {
 	private _firstName: string;
 
 	private _lastName: string;
 
 	private _dateOfBirth: Date;
 
-	private _regNo: string;
+	private _staffId: string;
 
-	private _course: string;
+	private _department: any;
+
+	private _units: any[];
 
 	constructor(
 		firstName: string,
 		lastName: string,
 		dateOfBirth: Date,
-		regNo = '',
-		course: string,
+		staffId: string,
+		department: any,
+		units: any[] = [],
 	) {
-		if (!course) {
+		if (!department) {
 			throw new ExpressError({
 				data: {},
-				message: 'Course required',
+				message: 'Department required',
 				status: 'error',
 				statusCode: 400,
 			});
 		}
-		if (!validateMongodbId(course)) {
+		if (!validateMongodbId(department)) {
 			throw new ExpressError({
 				data: {},
-				message: 'Invalid course id',
+				message: 'Invalid department id',
 				status: 'error',
 				statusCode: 400,
 			});
@@ -68,7 +73,7 @@ export class StudentDto {
 				statusCode: 400,
 			});
 		}
-		if (!moment(dateOfBirth).isBefore(Date.now())) {
+		if (!moment(new Date(dateOfBirth).getTime()).isBefore(Date.now())) {
 			throw new ExpressError({
 				data: {},
 				message: 'Date cannot come after today date required',
@@ -76,10 +81,35 @@ export class StudentDto {
 				statusCode: 400,
 			});
 		}
-		if (moment(Date.now()).year() - moment(dateOfBirth).year() < 18) {
+		if (!(units.length > 1)) {
 			throw new ExpressError({
 				data: {},
-				message: 'Student must be over 18years old',
+				message: 'Lecturer must be assigned at least 1 unit',
+				status: 'error',
+				statusCode: 400,
+			});
+		}
+		if (!(units.length > 0)) {
+			units.forEach((unit) => {
+				if (!validateMongodbId(unit)) {
+					throw new ExpressError({
+						data: {},
+						message: 'Invalid unit id',
+						status: 'error',
+						statusCode: 400,
+					});
+				}
+			});
+		}
+
+		if (
+			moment(Date.now()).year() -
+				moment(new Date(dateOfBirth).getTime()).year() <
+			18
+		) {
+			throw new ExpressError({
+				data: {},
+				message: 'Lecturer must be over 18years old',
 				status: 'error',
 				statusCode: 400,
 			});
@@ -87,8 +117,9 @@ export class StudentDto {
 		this._firstName = firstName;
 		this._lastName = lastName;
 		this._dateOfBirth = dateOfBirth;
-		this._regNo = regNo;
-		this._course = course;
+		this._staffId = staffId ? staffId : reg();
+		this._units = units;
+		this._department = department;
 	}
 
 	get firstName() {
@@ -103,12 +134,16 @@ export class StudentDto {
 		return this._dateOfBirth;
 	}
 
-	get course() {
-		return this._course;
+	get staffId() {
+		return this._staffId;
 	}
 
-	get regNo() {
-		return this._regNo;
+	get department() {
+		return this._department;
+	}
+
+	get units() {
+		return this._units;
 	}
 
 	toJSon = () => {
@@ -116,8 +151,9 @@ export class StudentDto {
 			firstName: this.firstName,
 			lastName: this.lastName,
 			dateOfBirth: this.dateOfBirth,
-			regNo: this.regNo,
-			course: this.course,
+			staffId: this.staffId,
+			units: this.units,
+			department: this.department,
 		};
 	};
 }

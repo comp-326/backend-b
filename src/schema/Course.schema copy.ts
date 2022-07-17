@@ -17,8 +17,8 @@ export interface ICourseDocumentModel extends mongoose.Model<ICourseDocument> {
 
 const courseSchema: mongoose.Schema<ICourseDocument> = new mongoose.Schema(
 	{
-		name: { type: String },
-		code: { type: String },
+		name: { type: String ,unique:true},
+		code: { type: String,unique:true },
 		department: { type: mongoose.SchemaTypes.ObjectId, ref: 'department' },
 	},
 	{ timestamps: true },

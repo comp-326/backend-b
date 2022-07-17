@@ -7,7 +7,7 @@ class StudentDao {
 	getAllStudents = async (limit: number, page: number) => {
 		const students = await Student.find()
 			.skip(limit * (page - 1))
-			.limit(limit);
+			.limit(limit).populate('course').populate('course.department');
 
 		return students;
 	};

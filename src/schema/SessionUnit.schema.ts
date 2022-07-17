@@ -5,6 +5,8 @@ export interface ISessionUnit {
 	sessionYear: number;
 	sessionSemester: number;
 	year: number;
+	code:string
+	course: any;
 	units: any[];
 }
 
@@ -23,6 +25,17 @@ const sessionUnitSchema: mongoose.Schema<ISessionUnitDocument> =
 			sessionYear: { type: Number },
 			sessionSemester: { type: Number },
 			year: { type: Number },
+			code: {
+				type: String,
+				unique: true,
+				required: true,
+				uppercase: true,
+			},
+			course: {
+				type: mongoose.SchemaTypes.ObjectId,
+				ref: 'course',
+				required: true,
+			},
 			units: {
 				type: [mongoose.SchemaTypes.ObjectId],
 				ref: 'unit',

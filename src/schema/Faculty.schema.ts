@@ -3,21 +3,26 @@ import mongoose from '@comp326-db/mongodb';
 
 export interface IFaculty {
 	name: string;
-    dean:any
+	// dean: any;
 }
 
 interface IFacultyDocument extends mongoose.Document, IFaculty {
 	_doc: IFaculty;
 }
 
-export interface IFacultyDocumentModel extends mongoose.Model<IFacultyDocument> {
+export interface IFacultyDocumentModel
+	extends mongoose.Model<IFacultyDocument> {
 	search: (query: string) => Promise<any>;
 }
 
 const facultySchema: mongoose.Schema<IFacultyDocument> = new mongoose.Schema(
 	{
-		name: { type: String },
-		dean: { type: mongoose.SchemaTypes.ObjectId, ref: 'lecturer' },
+		name: { type: String, unique: true },
+		// dean: {
+		// 	type: mongoose.SchemaTypes.ObjectId,
+		// 	ref: 'lecturer',
+		// 	required: false,
+		// },
 	},
 	{ timestamps: true },
 );

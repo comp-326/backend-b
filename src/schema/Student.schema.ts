@@ -24,7 +24,9 @@ const studentSchema: mongoose.Schema<IStudentDocument> = new mongoose.Schema({
 	dateOfBirth: { type: mongoose.SchemaTypes.Date },
 	regNo: { type: String },
 	course: {
-		type: mongoose.SchemaTypes.Mixed,
+		type: mongoose.SchemaTypes.ObjectId,
+		ref:'course',
+		required: true,
 	},
 });
 

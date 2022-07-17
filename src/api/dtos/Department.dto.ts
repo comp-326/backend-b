@@ -4,11 +4,11 @@ import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 export class DepartmentDto {
 	private _name: string;
 
-	private _cod: string;
+	// private _cod: string;
 
 	private _faculty: string;
 
-	constructor(name: string, cod: string, faculty: string) {
+	constructor(name: string, /* cod: string, */ faculty: string) {
 		if (!name) {
 			throw new ExpressError({
 				data: {},
@@ -17,14 +17,14 @@ export class DepartmentDto {
 				statusCode: 400,
 			});
 		}
-		if (!cod) {
-			throw new ExpressError({
-				data: {},
-				message: 'Department cod required',
-				status: 'error',
-				statusCode: 400,
-			});
-		}
+		// if (!cod) {
+		// 	throw new ExpressError({
+		// 		data: {},
+		// 		message: 'Department cod required',
+		// 		status: 'error',
+		// 		statusCode: 400,
+		// 	});
+		// }
 		if (!faculty) {
 			throw new ExpressError({
 				data: {},
@@ -42,7 +42,7 @@ export class DepartmentDto {
 			});
 		}
 		this._name = name;
-		this._cod = cod;
+		// this._cod = cod;
 		this._faculty = faculty;
 	}
 
@@ -50,9 +50,9 @@ export class DepartmentDto {
 		return this._name;
 	}
 
-	get cod() {
-		return this._cod;
-	}
+	// get cod() {
+	// 	return this._cod;
+	// }
 
 	get faculty() {
 		return this._faculty;
@@ -61,7 +61,7 @@ export class DepartmentDto {
 	toJSon = () => {
 		return {
 			name: this.name,
-			cod: this.cod,
+			// cod: this.cod,
 			faculty: this.faculty,
 		};
 	};

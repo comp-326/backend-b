@@ -3,7 +3,7 @@ import mongoose from '@comp326-db/mongodb';
 
 export interface IDepartment {
 	name: string;
-	cod: string;
+	cod?: string;
 	faculty: any;
 }
 
@@ -19,8 +19,8 @@ export interface IDepartmentDocumentModel
 const departmentSchema: mongoose.Schema<IDepartmentDocument> =
 	new mongoose.Schema(
 		{
-			name: { type: String },
-			cod: { type: String },
+			name: { type: String, unique: true },
+			cod: { type: String, default: '' },
 			faculty: { type: mongoose.SchemaTypes.ObjectId, ref: 'faculty' },
 		},
 		{ timestamps: true },

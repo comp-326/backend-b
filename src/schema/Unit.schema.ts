@@ -5,6 +5,8 @@ export interface IUnit {
 	name: string;
 	code: string;
 	department: any;
+	year: number;
+	semester: number;
 }
 
 interface IUnitDocument extends mongoose.Document, IUnit {
@@ -17,8 +19,8 @@ export interface IUnitDocumentModel extends mongoose.Model<IUnitDocument> {
 
 const unitSchema: mongoose.Schema<IUnitDocument> = new mongoose.Schema(
 	{
-		name: { type: String },
-		code: { type: String },
+		name: { type: String, unique: true },
+		code: { type: String, unique: true, uppercase: true },
 		department: { type: mongoose.SchemaTypes.ObjectId, ref: 'department' },
 	},
 	{ timestamps: true },
