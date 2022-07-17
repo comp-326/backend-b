@@ -1,3 +1,5 @@
+import DepartmentModel from '@comp326-schema/Department.schema';
+import { ExpressError } from '@comp326-common/errors/ExpressError';
 import Course, { ICourse } from '@comp326-schema/Course.schema';
 
 class CourseDao {
@@ -6,10 +8,32 @@ class CourseDao {
 			.skip(limit * (page - 1))
 			.limit(limit);
 
-		return courses;
+		return courses;	
 	};
 
 	createCourse = async (course: ICourse) => {
+		const existingCourse = await Course.findOne({
+			$or: [{ name: course.name, code: course.code }],
+		});
+		if (existingCourse) {
+			throw new ExpressError({
+				status: 'warning',
+				data: {},
+				statusCode: 400,
+				message: 'Course already exist',
+			});
+		}
+		const existingDepartment = await DepartmentModel.findById(
+			course.department,
+		);
+		if (!existingDepartment) {
+			throw new ExpressError({
+				status: 'warning',
+				data: {},
+				statusCode: 400,
+				message: 'Department does not exist',
+			});
+		}
 		const newCourse = await Course.create(course);
 
 		return newCourse;

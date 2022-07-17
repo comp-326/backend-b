@@ -1,4 +1,7 @@
-import StudentSession, { IStudentSession } from '@comp326-schema/StudentSession.schema';
+import { ExpressError } from '@comp326-common/errors/ExpressError';
+import StudentSession, {
+	IStudentSession,
+} from '@comp326-schema/StudentSession.schema';
 
 class StudentSessionDao {
 	getAllStudentSessions = async (limit: number, page: number) => {
@@ -10,13 +13,33 @@ class StudentSessionDao {
 	};
 
 	createStudentSession = async (studentSession: IStudentSession) => {
+		const existingStudentSession = await StudentSession.findOne({
+			$and: [
+				{ student: studentSession.student },
+				{ sessionYear: studentSession.sessionYear },
+				{ sessionSemester: studentSession.sessionSemester },
+			],
+		});
+		if (existingStudentSession) {
+			throw new ExpressError({
+				status: 'warning',
+				statusCode: 400,
+				message: 'Student session already exists',
+				data: {},
+			});
+		}
 		const newStudentSession = await StudentSession.create(studentSession);
 
 		return newStudentSession;
 	};
 
-	updateStudentSession = async (id: string, studentSession: IStudentSession) => {
-		const updated = await StudentSession.findByIdAndUpdate(id, { ...studentSession });
+	updateStudentSession = async (
+		id: string,
+		studentSession: IStudentSession,
+	) => {
+		const updated = await StudentSession.findByIdAndUpdate(id, {
+			...studentSession,
+		});
 
 		return updated;
 	};

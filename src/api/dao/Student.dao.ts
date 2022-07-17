@@ -13,6 +13,17 @@ class StudentDao {
 	};
 
 	createStudent = async (student: IStudent) => {
+		const existingStudent = await Student.findOne({
+			$and: [{ regNo: student.regNo }, { course: student.course }],
+		});
+		if (existingStudent) {
+			throw new ExpressError({
+				status: 'warning',
+				data: {},
+				statusCode: 400,
+				message: 'Student already exists',
+			});
+		}
 		const course = await CourseDao.findCourseById(student.course);
 		if (!course) {
 			throw new ExpressError({

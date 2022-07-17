@@ -1,3 +1,4 @@
+import CourseModel from '@comp326-schema/Course.schema';
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import SessionUnit, { ISessionUnit } from '@comp326-schema/SessionUnit.schema';
 
@@ -24,6 +25,16 @@ class SessionUnitDao {
 				data: {},
 			});
 		}
+		const existingCourse = await CourseModel.findById(sessionUnit.course);
+		if (!existingCourse) {
+			throw new ExpressError({
+				message: 'Course does not exist',
+				statusCode: 400,
+				status: 'warning',
+				data: {},
+			});
+		}
+
 		const newSessionUnit = await SessionUnit.create(sessionUnit);
 
 		return newSessionUnit;

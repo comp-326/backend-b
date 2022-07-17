@@ -1,3 +1,4 @@
+import DepartmentModel from '@comp326-schema/Department.schema';
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import Unit, { IUnit } from '@comp326-schema/Unit.schema';
 
@@ -12,12 +13,23 @@ class UnitDao {
 
 	createUnit = async (unit: IUnit) => {
 		const existingUnit = await Unit.findOne({
-			name: unit.name,
-			code: unit.code,
+			$or: [{ code: unit.code }, { name: unit.name }],
 		});
+
 		if (existingUnit) {
 			throw new ExpressError({
 				message: 'Unit already exists',
+				statusCode: 400,
+				status: 'warning',
+				data: {},
+			});
+		}
+		const existingDepartment = await DepartmentModel.findById(
+			unit.department,
+		);
+		if (!existingDepartment) {
+			throw new ExpressError({
+				message: 'Department does not exist',
 				statusCode: 400,
 				status: 'warning',
 				data: {},

@@ -1,3 +1,4 @@
+import { ExpressError } from '@comp326-common/errors/ExpressError';
 import Faculty, { IFaculty } from '@comp326-schema/Faculty.schema';
 
 class FacultyDao {
@@ -10,6 +11,17 @@ class FacultyDao {
 	};
 
 	createFaculty = async (faculty: IFaculty) => {
+		const existingFaculty = await Faculty.findOne({
+			$or: [{ name: faculty.name }],
+		});
+		if (existingFaculty) {
+			throw new ExpressError({
+				message: 'Faculty already exists',
+				statusCode: 400,
+				status: 'warning',
+				data: {},
+			});
+		}
 		const newFaculty = await Faculty.create(faculty);
 
 		return newFaculty;

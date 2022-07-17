@@ -81,7 +81,9 @@ export class LecturerDto {
 				statusCode: 400,
 			});
 		}
-		if (!(units.length > 1)) {
+		console.log(units);
+		
+		if ((units.length === 0) || !Array.isArray(units)) {
 			throw new ExpressError({
 				data: {},
 				message: 'Lecturer must be assigned at least 1 unit',

@@ -1,3 +1,5 @@
+import DepartmentModel from '@comp326-schema/Department.schema';
+import { ExpressError } from '@comp326-common/errors/ExpressError';
 import Lecturer, { ILecturer } from '@comp326-schema/Lecturer.schema';
 
 class LecturerDao {
@@ -11,6 +13,28 @@ class LecturerDao {
 	};
 
 	createLecturer = async (lecturer: ILecturer) => {
+		const existingLecturer = await Lecturer.findOne({
+			$or: [{ staffId: lecturer.staffId }]
+		});
+		if (existingLecturer) {
+			throw new ExpressError({
+				message: 'Lecturer already exists',
+				statusCode: 400,
+				status: 'warning',
+				data: {},
+			});
+		}
+		const existingDepartment = await DepartmentModel.findById(
+			lecturer.department,
+		);
+		if (!existingDepartment) {
+			throw new ExpressError({
+				message: 'Department does not exist',
+				statusCode: 400,
+				status: 'warning',
+				data: {},
+			});
+		}
 		const newLecturer = await Lecturer.create(lecturer);
 
 		return newLecturer;
