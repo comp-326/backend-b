@@ -1,4 +1,7 @@
+import dotenv from 'dotenv';
 import path from 'path';
+
+dotenv.config();
 
 const config = {
 	baseDir: path.dirname(__dirname),

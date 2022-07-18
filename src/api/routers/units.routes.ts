@@ -1,15 +1,16 @@
 import { BaseRouter } from '@comp326-common/routes/baseRouter';
+import unitController from '@comp326-api/controllers/unit.controller';
 
-class UserRouter extends BaseRouter{
-
-	route(){
-		this.router.get('/',(req,res)=>{
-            
-			return res.status(200).json('Units route');
-		});
+class UnitRouter extends BaseRouter {
+	route() {
+		this.router.post('/', unitController.createUnit);
+		this.router.get('/', unitController.getUnits);
+		this.router.get('/find/:reg', unitController.getUnitByReg);
+		this.router.get('/:id', unitController.getUnitById);
+		this.router.get('/q', unitController.searchUnit);
 
 		return this.router;
 	}
 }
 
-export default new UserRouter();
+export default new UnitRouter().route();

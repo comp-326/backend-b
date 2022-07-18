@@ -1,15 +1,16 @@
 import { BaseRouter } from '@comp326-common/routes/baseRouter';
+import lecturerController from '@comp326-api/controllers/lecturer.controller';
 
-class UserRouter extends BaseRouter{
-
-	route(){
-		this.router.get('/',(req,res)=>{
-            
-			return res.status(200).json('Lecturers route');
-		});
+class LecturerRouter extends BaseRouter {
+	route() {
+		this.router.post('/', lecturerController.createLecturer);
+		this.router.get('/', lecturerController.getLecturers);
+		this.router.get('/find/:reg', lecturerController.getLecturerByReg);
+		this.router.get('/q', lecturerController.searchLecturer);
+		this.router.get('/:id', lecturerController.getLecturerById);
 
 		return this.router;
 	}
 }
 
-export default new UserRouter();
+export default new LecturerRouter().route();

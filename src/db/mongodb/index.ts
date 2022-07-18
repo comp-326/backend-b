@@ -13,6 +13,15 @@ mongoose.connection.on('connected', () => {
 		}),
 	);
 });
+
+mongoose.connection.on('connect', () => {
+	dbLogger.info(
+		JSON.stringify({
+			message: 'MongoDB connect',
+			time: moment().format('LLLL'),
+		}),
+	);
+});
 mongoose.connection.on('error', (err) => {
 	dbLogger.error(
 		JSON.stringify({ time: moment().format('LLLL'), error: err.message }),

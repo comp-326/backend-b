@@ -65,6 +65,12 @@
       "@comp326-common/*": [
         "./src/common/*"
       ],
+      "@comp326-api": [
+        "./src/api"
+      ],
+      "@comp326-api/*": [
+        "./src/api/*"
+      ],
       "@comp326-logger": [
         "./src/logger"
       ],
@@ -76,6 +82,12 @@
       ],
       "@comp326-server/*": [
         "./src/server/*"
+      ],
+      "@comp326-schema": [
+        "./src/schema"
+      ],
+      "@comp326-schema/*": [
+        "./src/schema/*"
       ],
       "@comp326-plugins": [
         "./src/plugins"
