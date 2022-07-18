@@ -12,10 +12,10 @@ const getCurrentCode = () => {
 	};
 };
 
-export const createStudentRegistrationNumber = (courseCode: string) => {
+export const createStudentRegistrationNumber = async (courseCode: string) => {
 	const { middleCode, year } = getCurrentCode();
 	const regNumber = `${courseCode.toUpperCase()}/${middleCode}/${year}`;
-	const password = Password.hash(regNumber);
+	const password = await Password.hash(regNumber);
 
 	return { regNumber, password };
 };

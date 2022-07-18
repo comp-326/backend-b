@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { ILecturer } from '@comp326-schema/Lecturer.schema';
+import { generateHudumaNumber } from '@comp326-helpers/hudumaNumber';
 import moment from 'moment';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 import { emailRegex, idNumberRegex, phoneRegex } from '@comp326-constants/regex';
@@ -51,7 +52,7 @@ export class LecturerDto {
 				statusCode: 400,
 			});
 		}
-		if(nationalId && !idNumberRegex.test(nationalId)) {
+		if (nationalId && !idNumberRegex.test(nationalId)) {
 			throw new ExpressError({
 				data: {},
 				message: 'Invalid national id number',
@@ -192,7 +193,7 @@ export class LecturerDto {
 		this._nationalId = nationalId;
 		this._hudumaNumber = hudumaNumber
 			? hudumaNumber
-			: new Date().getTime().toString().slice(5, 13);
+			: generateHudumaNumber();
 		this._password = password;
 		this._units = units;
 	}

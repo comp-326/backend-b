@@ -12,6 +12,7 @@ export interface IStudent {
 	hudumaNumber: string;
 	password: string;
 	course: any;
+	currentSession: any;
 }
 
 interface IStudentDocument extends mongoose.Document, IStudent {
@@ -28,7 +29,7 @@ const studentSchema: mongoose.Schema<IStudentDocument> = new mongoose.Schema({
 	lastName: { type: String },
 	dateOfBirth: { type: mongoose.SchemaTypes.Date },
 	regNo: { type: String, unique: true },
-	hudumaNumber: { type: String, unique: true,deafult:'' },
+	hudumaNumber: { type: String, unique: true },
 	phone: { type: String, unique: true, min: 10, max: 13, trim: true },
 	email: { type: String, required: true, unique: true, trim: true },
 	nationalId: {
@@ -39,11 +40,15 @@ const studentSchema: mongoose.Schema<IStudentDocument> = new mongoose.Schema({
 		min: 7,
 		max: 10,
 	},
-	password: { type: String, minlength: 8, required: true },
+	password: { type: String, minlength: 8, required: true,select: false },
 	course: {
 		type: mongoose.SchemaTypes.ObjectId,
 		ref: 'course',
 		required: true,
+	},
+	currentSession: {
+		type: mongoose.SchemaTypes.ObjectId,
+		ref: 'studentSession',
 	},
 });
 
