@@ -1,5 +1,5 @@
-import AppServer from '@comp326-server';
-import { envConfig } from '@comp326-config';
+import AppServer from './server';
+import { envConfig } from './config';
 
 const app = new AppServer();
 

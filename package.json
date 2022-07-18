@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./build/index.js",
     "dev": "nodemon ./src/index.ts",
-    "build": "yarn remove:build && gulp buildProject && gulp copy:apiDocs ",
+    "build": "yarn remove:build && gulp buildProject",
     "remove:build": "rimraf ./dist && rimraf ./build",
     "lint": "eslint --ext .js,.ts ./src",
     "swagger": "ts-node ./src/swagger/index.ts",

@@ -36,7 +36,7 @@ class AppServer {
 		});
 		process.on('SIGINT', () => {
 			processLogger.warn('CTRL + C Stopping node service');
-			process.exit(0);
+			// process.exit(0);
 		});
 	};
 
