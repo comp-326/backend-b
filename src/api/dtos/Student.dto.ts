@@ -13,12 +13,15 @@ export class StudentDto {
 
 	private _course: string;
 
+	private _currentSession: string;
+
 	constructor(
 		firstName: string,
 		lastName: string,
 		dateOfBirth: Date,
 		regNo = '',
 		course: string,
+		currentSession = '',
 	) {
 		if (!course) {
 			throw new ExpressError({
@@ -89,10 +92,15 @@ export class StudentDto {
 		this._dateOfBirth = dateOfBirth;
 		this._regNo = regNo;
 		this._course = course;
+		this._currentSession = currentSession;
 	}
 
 	get firstName() {
 		return this._firstName;
+	}
+
+	get currentSession() {
+		return this._currentSession;
 	}
 
 	get lastName() {
@@ -118,6 +126,7 @@ export class StudentDto {
 			dateOfBirth: this.dateOfBirth,
 			regNo: this.regNo,
 			course: this.course,
+			currentSession: this.currentSession,
 		};
 	};
 }

@@ -7,6 +7,11 @@ export interface ILecturer {
 	dateOfBirth: Date;
 	staffId: string;
 	department: any;
+	email: string;
+	phone: string;
+	nationalId: string;
+	hudumaNumber: string;
+	password: string;
 	units: any[];
 }
 
@@ -33,6 +38,40 @@ const lecturerSchema: mongoose.Schema<ILecturerDocument> = new mongoose.Schema({
 		type: [mongoose.SchemaTypes.ObjectId],
 		ref: 'unit',
 		required: true,
+	},
+	email: {
+		type: String,
+		required: true,
+		unique: true,
+		trim: true,
+	},
+	nationalId: {
+		type: String,
+		required: true,
+		min: 7,
+		max: 10,
+		trim: true,
+	},
+	hudumaNumber: {
+		type: String,
+		required: true,
+		unique: true,
+		minlength: 8,
+		maxLength: 10,
+		trim: true,
+		default: '',
+	},
+	password: {
+		type: String,
+		required: true,
+		minlength: 8,
+		maxlength: 16,
+	},
+	phone: {
+		type: String,
+		required: true,
+		minlength: 10,
+		maxlength: 12,
 	},
 });
 lecturerSchema.index(

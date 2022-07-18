@@ -13,14 +13,7 @@ class LecturerService {
 	}
 
 	createLecturer = async (lecturer: ILecturer) => {
-		const newLecturer = new LecturerDto(
-			lecturer.firstName,
-			lecturer.lastName,
-			lecturer.dateOfBirth,
-			lecturer.staffId,
-			lecturer.department,
-			lecturer.units,
-		).toJSon();
+		const newLecturer = new LecturerDto(lecturer).toJSon();
 		const res = await this.lecturerDao.createLecturer(newLecturer);
 
 		return res;
@@ -31,14 +24,7 @@ class LecturerService {
 		const update = { ...existingLecturer!, ...lecturer };
 		const res = await this.lecturerDao.updateLecturer(
 			id,
-			new LecturerDto(
-				update.firstName,
-				update.lastName,
-				update.dateOfBirth,
-				update.staffId,
-				update.department,
-				update.units,
-			).toJSon(),
+			new LecturerDto(update).toJSon(),
 		);
 
 		return res;
