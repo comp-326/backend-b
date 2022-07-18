@@ -1,20 +1,21 @@
-import CourseDao from './Course.dao';
 import { ExpressError } from '@comp326-common/errors/ExpressError';
-import { createStudentRegistrationNumber as reg } from '@comp326-helpers/reg-generator/regGenerator';
 import Student, { IStudent } from '@comp326-schema/Student.schema';
 
 class StudentDao {
 	getAllStudents = async (limit: number, page: number) => {
 		const students = await Student.find()
 			.skip(limit * (page - 1))
-			.limit(limit).populate('course').populate('course.department');
+			.limit(limit)
+			.populate('course')
+			.populate('course.department')
+			.populate('currentSession');
 
 		return students;
 	};
 
 	createStudent = async (student: IStudent) => {
 		const existingStudent = await Student.findOne({
-			$and: [{ regNo: student.regNo }, { course: student.course }],
+			$or: [{ nationalId: student.nationalId }, { email: student.email }, { regNo: student.regNo },],
 		});
 		if (existingStudent) {
 			throw new ExpressError({
@@ -24,19 +25,9 @@ class StudentDao {
 				message: 'Student already exists',
 			});
 		}
-		const course = await CourseDao.findCourseById(student.course);
-		if (!course) {
-			throw new ExpressError({
-				message: 'Course not found',
-				statusCode: 404,
-				status: 'warning',
-				data: {},
-			});
-		}
-		const newStudent = await Student.create({
-			...student,
-			regNo: reg(course.code),
-		});
+		const newStudent = await Student.create(
+			student
+		);
 
 		return newStudent;
 	};
@@ -56,6 +47,7 @@ class StudentDao {
 	searchStudent = async (query: string) => {
 		return await Student.find({ query });
 	};
+
 
 	findStudentById = async (id: string) => {
 		return await Student.findById(id);

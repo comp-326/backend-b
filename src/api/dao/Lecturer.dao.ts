@@ -14,7 +14,11 @@ class LecturerDao {
 
 	createLecturer = async (lecturer: ILecturer) => {
 		const existingLecturer = await Lecturer.findOne({
-			$or: [{ staffId: lecturer.staffId }]
+			$or: [
+				{ email: lecturer.email },
+				{ nationalId: lecturer.nationalId },
+				{ staffId: lecturer.staffId },
+			]
 		});
 		if (existingLecturer) {
 			throw new ExpressError({

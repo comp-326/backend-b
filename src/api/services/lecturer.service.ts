@@ -3,6 +3,7 @@ import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { ILecturer } from '@comp326-schema/Lecturer.schema';
 import LDO from '@comp326-api/dao/Lecturer.dao';
 import { LecturerDto } from '@comp326-api/dtos/Lecturer.dto';
+import { createStaffRegistrationNumber as reg } from '@comp326-helpers/reg-generator/regGenerator';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 
 class LecturerService {
@@ -13,14 +14,12 @@ class LecturerService {
 	}
 
 	createLecturer = async (lecturer: ILecturer) => {
-		const newLecturer = new LecturerDto(
-			lecturer.firstName,
-			lecturer.lastName,
-			lecturer.dateOfBirth,
-			lecturer.staffId,
-			lecturer.department,
-			lecturer.units,
-		).toJSon();
+		const data = await reg();
+		const newLecturer = new LecturerDto({
+			...lecturer,
+			password: data.password,
+			staffId: data.staffId,
+		}).toJSon();
 		const res = await this.lecturerDao.createLecturer(newLecturer);
 
 		return res;
@@ -31,14 +30,7 @@ class LecturerService {
 		const update = { ...existingLecturer!, ...lecturer };
 		const res = await this.lecturerDao.updateLecturer(
 			id,
-			new LecturerDto(
-				update.firstName,
-				update.lastName,
-				update.dateOfBirth,
-				update.staffId,
-				update.department,
-				update.units,
-			).toJSon(),
+			new LecturerDto(update).toJSon(),
 		);
 
 		return res;

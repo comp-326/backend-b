@@ -10,8 +10,6 @@ class LecturerController {
 
 	createLecturer = async (req: IReq, res: IRes, next: INext) => {
 		try {
-			console.log(req.body);
-			
 			const response = await lecturerService.createLecturer(req.body);
 
 			return res.status(200).json({ data: response });
