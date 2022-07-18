@@ -64,6 +64,7 @@ const lecturerSchema: mongoose.Schema<ILecturerDocument> = new mongoose.Schema({
 		required: true,
 		minlength: 8,
 		maxlength: 255,
+		select:false
 	},
 	phone: {
 		type: String,
