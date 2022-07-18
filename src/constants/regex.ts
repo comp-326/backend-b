@@ -6,3 +6,7 @@ export const passwordRegex = new RegExp(
 export const emailRegex = new RegExp(
 	/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 );
+
+export const phoneRegex = new RegExp(/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/);
+
+export const idNumberRegex = new RegExp(/^([1-9])([0-9]){7}$/);

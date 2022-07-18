@@ -48,14 +48,12 @@ const lecturerSchema: mongoose.Schema<ILecturerDocument> = new mongoose.Schema({
 	nationalId: {
 		type: String,
 		required: true,
-		min: 7,
+		min: 8,
 		max: 10,
 		trim: true,
 	},
 	hudumaNumber: {
 		type: String,
-		required: true,
-		unique: true,
 		minlength: 8,
 		maxLength: 10,
 		trim: true,
@@ -65,18 +63,16 @@ const lecturerSchema: mongoose.Schema<ILecturerDocument> = new mongoose.Schema({
 		type: String,
 		required: true,
 		minlength: 8,
-		maxlength: 16,
+		maxlength: 255,
 	},
 	phone: {
 		type: String,
 		required: true,
-		minlength: 10,
-		maxlength: 12,
 	},
 });
 lecturerSchema.index(
-	{ staffId: 'text', firstName: 'text', lastName: 'text' },
-	{ unique: false },
+	{ staffId: 'text', firstName: 'text', lastName: 'text', nationalId: 'text' },
+	{ unique: true },
 );
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const LecturerModel = mongoose.model<ILecturerDocument, ILecturerDocumentModel>(

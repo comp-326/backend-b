@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { ILecturer } from '@comp326-schema/Lecturer.schema';
-import { emailRegex } from '@comp326-constants/regex';
 import moment from 'moment';
-import { createStaffRegistrationNumber as reg } from '@comp326-helpers/reg-generator/regGenerator';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
+import { emailRegex, idNumberRegex, phoneRegex } from '@comp326-constants/regex';
 
 export class LecturerDto {
 	private _firstName: string;
@@ -29,21 +28,22 @@ export class LecturerDto {
 
 	private _units: any[] = [];
 
-	constructor({
-		dateOfBirth,
-		department,
-		email,
-		firstName,
-		hudumaNumber,
-		lastName,
-		nationalId,
-		password,
-		phone,
-		staffId,
-		units,
-	}: ILecturer) {
+	constructor(lec: ILecturer) {
+		const {
+			dateOfBirth,
+			department,
+			email,
+			firstName,
+			hudumaNumber,
+			lastName,
+			nationalId,
+			password,
+			phone,
+			staffId,
+			units,
+		} = lec;
 
-		if (!password) {
+		if (!nationalId) {
 			throw new ExpressError({
 				data: {},
 				message: 'National id number required',
@@ -51,10 +51,18 @@ export class LecturerDto {
 				statusCode: 400,
 			});
 		}
-		if (!nationalId) {
+		if(nationalId && !idNumberRegex.test(nationalId)) {
 			throw new ExpressError({
 				data: {},
-				message: 'National id number required',
+				message: 'Invalid national id number',
+				status: 'error',
+				statusCode: 400,
+			});
+		}
+		if (!password) {
+			throw new ExpressError({
+				data: {},
+				message: 'Password  field required',
 				status: 'error',
 				statusCode: 400,
 			});
@@ -67,10 +75,10 @@ export class LecturerDto {
 				statusCode: 400,
 			});
 		}
-		if (!email) {
+		if (phone && !phoneRegex.test(phone)) {
 			throw new ExpressError({
 				data: {},
-				message: 'Email address required',
+				message: 'Please provide valid number',
 				status: 'error',
 				statusCode: 400,
 			});
@@ -163,7 +171,7 @@ export class LecturerDto {
 
 		if (
 			moment(Date.now()).year() -
-				moment(new Date(dateOfBirth).getTime()).year() <
+			moment(new Date(dateOfBirth).getTime()).year() <
 			18
 		) {
 			throw new ExpressError({
@@ -173,15 +181,18 @@ export class LecturerDto {
 				statusCode: 400,
 			});
 		}
+
 		this._firstName = firstName;
 		this._lastName = lastName;
 		this._dateOfBirth = dateOfBirth;
-		this._staffId = staffId ? staffId : reg();
+		this._staffId = staffId;
 		this._department = department;
 		this._email = email;
 		this._phone = phone;
 		this._nationalId = nationalId;
-		this._hudumaNumber = hudumaNumber ? hudumaNumber : '';
+		this._hudumaNumber = hudumaNumber
+			? hudumaNumber
+			: new Date().getTime().toString().slice(5, 13);
 		this._password = password;
 		this._units = units;
 	}
