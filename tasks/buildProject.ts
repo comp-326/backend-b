@@ -17,7 +17,7 @@ function buildProject() {
 
 	return compiled.js
 		.pipe(sourcemaps.write('.'))
-		.pipe(gulp.dest('./build/src'));
+		.pipe(gulp.dest('./build'));
 }
 
 export default gulp.task('buildProject', buildProject);
