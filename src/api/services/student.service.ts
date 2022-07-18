@@ -3,8 +3,8 @@ import CDO from '@comp326-api/dao/Course.dao';
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { IStudent } from '@comp326-schema/Student.schema';
 import SDO from '@comp326-api/dao/Student.dao';
-import { StudentDto } from '@comp326-api/dtos/Student.dto';
 import { createStudentRegistrationNumber } from '@comp326-helpers/reg-generator/regGenerator';
+import { studentDTO } from '@comp326-api/dtos/Student.dto';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 
 class StudentService {
@@ -21,6 +21,14 @@ class StudentService {
 	}
 
 	createStudent = async (student: IStudent) => {
+		if (!validateMongodbId(student.course)) {
+			throw new ExpressError({
+				data: {},
+				message: 'Invalid course id',
+				status: 'error',
+				statusCode: 400,
+			});
+		}
 		const course = await this.courseDao.findCourseById(student.course);
 		if (!course) {
 			throw new ExpressError({
@@ -33,22 +41,42 @@ class StudentService {
 		const data = await createStudentRegistrationNumber(course.code);
 		student.regNo = data.regNumber;
 		student.password = data.password;
-		const newStudent = new StudentDto(
-			student
-		).toJSon();
-		const res = await this.studentDao.createStudent(newStudent);
+		const ns = studentDTO(student);
+		const res = await this.studentDao.createStudent({
+			course: ns.getCourse(),
+			currentSession: ns.getCurrentSession(),
+			dateOfBirth: ns.getDateOfBirth(),
+			email: ns.getEmail(),
+			firstName: ns.getFirstName(),
+			hudumaNumber: ns.getHudumaNumber(),
+			lastName: ns.getLastName(),
+			nationalId: ns.getNationalId(),
+			phone: ns.getPhone(),
+			regNo: ns.getRegNo(),
+			password: ns.getPassword(),
+		});
 
 		return res;
 	};
 
 	updateStudent = async (id: string, student: Partial<IStudent>) => {
 		const existingStudent = await this.studentDao.findStudentById(id);
-		const update = { ...existingStudent!, ...student };
+		const us = studentDTO({ ...existingStudent!, ...student });
 		const res = await this.studentDao.updateStudent(
 			id,
-			new StudentDto(
-				update
-			).toJSon(),
+			{
+				course: us.getCourse(),
+				currentSession: us.getCurrentSession(),
+				dateOfBirth: us.getDateOfBirth(),
+				email: us.getEmail(),
+				firstName: us.getFirstName(),
+				hudumaNumber: us.getHudumaNumber(),
+				lastName: us.getLastName(),
+				nationalId: us.getNationalId(),
+				phone: us.getPhone(),
+				regNo: us.getRegNo(),
+				password: us.getPassword(),
+			},
 		);
 
 		return res;

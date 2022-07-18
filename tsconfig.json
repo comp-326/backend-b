@@ -64,6 +64,11 @@
       ],
       "@comp326-common/*": [
         "./src/common/*"
+      ],"@comp326-validators": [
+        "./src/validators"
+      ],
+      "@comp326-validators/*": [
+        "./src/validators/*"
       ],
       "@comp326-api": [
         "./src/api"
