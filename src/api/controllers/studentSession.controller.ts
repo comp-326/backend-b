@@ -60,7 +60,6 @@ class StudentSessionController {
 			const semester = req.query.semester
 				? parseInt(req.query.semester as string)
 				: 1;
-			console.log(semester,year);
 			const response = await studentSessionService.getLecturerUnitRegisteredStudents(
 				req.params.unit, year, semester,
 			);
@@ -90,6 +89,18 @@ class StudentSessionController {
 		try {
 			const response = await studentSessionService.searchStudentSession(
 				req.query.q as unknown as string,
+			);
+
+			return res.status(200).json({ data: response });
+		} catch (error) {
+			return next(error);
+		}
+	};
+
+	submitSessionResult = async (req: IReq, res: IRes, next: INext) => {
+		try {
+			const response = await studentSessionService.submitSessionResult(
+				req.params.session, req.body
 			);
 
 			return res.status(200).json({ data: response });
