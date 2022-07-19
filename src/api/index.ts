@@ -37,7 +37,7 @@ class Api {
 	public route = () => {
 		this.registerRoute('users', userRoutes.route())
 			.registerRoute('admin', adminRoutes.route())
-			.registerRoute('auth', authRoutes.route())
+			.registerRoute('auth', authRoutes)
 			.registerRoute('courses', coursesRoutes)
 			.registerRoute('session-units', sessionUnitsRoute)
 			.registerRoute('department', departmentsRoutes)
