@@ -1,6 +1,6 @@
 import { BaseRouter } from '@comp326-common/routes/baseRouter';
-import studentSessionController from '@comp326-api/controllers/studentSession.controller';
 import { loginRequired } from '@comp326-middlewares/auth';
+import studentSessionController from '@comp326-api/controllers/studentSession.controller';
 
 class StudentSessionRouter extends BaseRouter {
 	route() {

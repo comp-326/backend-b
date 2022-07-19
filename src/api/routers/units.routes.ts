@@ -1,4 +1,5 @@
 import { BaseRouter } from '@comp326-common/routes/baseRouter';
+import { loginRequired } from '@comp326-middlewares/auth';
 import unitController from '@comp326-api/controllers/unit.controller';
 
 class UnitRouter extends BaseRouter {
