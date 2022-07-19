@@ -2,6 +2,7 @@
 import CDO from '@comp326-api/dao/Course.dao';
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { IStudent } from '@comp326-schema/Student.schema';
+import { Password } from '@comp326-helpers/password';
 import SDO from '@comp326-api/dao/Student.dao';
 import { createStudentRegistrationNumber } from '@comp326-helpers/reg-generator/regGenerator';
 import { studentDTO } from '@comp326-api/dtos/Student.dto';
@@ -38,9 +39,9 @@ class StudentService {
 				statusCode: 400,
 			});
 		}
-		const data = await createStudentRegistrationNumber(course.code);
-		student.regNo = data.regNumber;
-		student.password = data.password;
+		const reg = await createStudentRegistrationNumber(course.code);
+		student.regNo = reg;
+		student.password = await Password.hash(reg);
 		const ns = studentDTO(student);
 		const res = await this.studentDao.createStudent({
 			course: ns.getCourse(),

@@ -8,6 +8,7 @@ const config = {
 	env: {
 		port: <number>(<unknown>process.env.PORT) || 4200,
 		host: process.env.HOST || 'localhost',
+		secretKey: process.env.SECRET_KEY || 'secretfromhelloverthere1234rr44',
 	},
 	mongo: {
 		url: process.env.MONGO_URL || 'mongodb://localhost/examcell-2',

@@ -1,8 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { Password } from '@comp326-helpers/password';
-
-// Get the current date in the format as string
 const getCurrentCode = () => {
 	const date = new Date();
 
@@ -12,20 +8,18 @@ const getCurrentCode = () => {
 	};
 };
 
-export const createStudentRegistrationNumber = async (courseCode: string) => {
+export const createStudentRegistrationNumber =  (courseCode: string) => {
 	const { middleCode, year } = getCurrentCode();
 	const regNumber = `${courseCode.toUpperCase()}/${middleCode}/${year}`;
-	const password = await Password.hash(regNumber);
 
-	return { regNumber, password };
+	return regNumber;
 };
 
-export const createStaffRegistrationNumber = async () => {
+export const createStaffRegistrationNumber =  () => {
 	const { middleCode, year } = getCurrentCode();
 	const staffId = `staff/${middleCode}/${year}`;
-	const password = await Password.hash(staffId);
 
-	return { staffId, password };
+	return staffId;
 };
 
 export const generateSessionUnitCode = (

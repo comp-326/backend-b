@@ -2,6 +2,7 @@
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { ILecturer } from '@comp326-schema/Lecturer.schema';
 import LDO from '@comp326-api/dao/Lecturer.dao';
+import { Password } from '@comp326-helpers/password';
 import UDO from '@comp326-api/dao/Unit.dao';
 import { lecturerDTO } from '@comp326-api/dtos/Lecturer.dto';
 import { createStaffRegistrationNumber as reg } from '@comp326-helpers/reg-generator/regGenerator';
@@ -22,11 +23,11 @@ class LecturerService {
 
 	createLecturer = async (lecturer: ILecturer) => {
 
-		const data = await reg();
+		const data = reg();
+		lecturer.staffId = data;
+		lecturer.password = await Password.hash(data);
 		const nl = lecturerDTO({
 			...lecturer,
-			password: data.password,
-			staffId: data.staffId,
 		});
 		const units = nl.getUnits();
 

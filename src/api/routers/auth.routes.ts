@@ -1,15 +1,12 @@
 import { BaseRouter } from '@comp326-common/routes/baseRouter';
+import authController from '@comp326-api/controllers/auth.controller';
 
-class UserRouter extends BaseRouter{
-
-	route(){
-		this.router.get('/',(req,res)=>{
-            
-			return res.status(200).json('Auth route');
-		});
+class AuthRouter extends BaseRouter {
+	route() {
+		this.router.post('/login', authController.login);
 
 		return this.router;
 	}
 }
 
-export default new UserRouter();
+export default new AuthRouter().route();
