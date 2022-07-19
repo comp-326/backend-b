@@ -58,6 +58,12 @@
       ],
       "@comp326-app/*": [
         "./src/app/*"
+      ], 
+      "@comp326-middlewares": [
+        "./src/middlewares"
+      ],
+      "@comp326-middlewares/*": [
+        "./src/middlewares/*"
       ],
       "@comp326-common": [
         "./src/common"

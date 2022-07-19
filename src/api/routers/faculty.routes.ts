@@ -3,11 +3,11 @@ import facultyController from '@comp326-api/controllers/faculty.controller';
 
 class FacultyRouter extends BaseRouter {
 	route() {
-		this.router.post('/', facultyController.createFaculty);
-		this.router.get('/', facultyController.getFacultys);
-		this.router.get('/find/:reg', facultyController.getFacultyByReg);
-		this.router.get('/:id', facultyController.getFacultyById);
-		this.router.get('/q', facultyController.searchFaculty);
+		this.router.post('/', loginRequired,facultyController.createFaculty);
+		this.router.get('/', loginRquired,facultyController.getFacultys);
+		this.router.get('/find/:reg', loginRequired,facultyController.getFacultyByReg);
+		this.router.get('/:id', loginRequired,facultyController.getFacultyById);
+		this.router.get('/q', loginRequired,facultyController.searchFaculty);
 
 		return this.router;
 	}

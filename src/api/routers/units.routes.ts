@@ -3,12 +3,12 @@ import unitController from '@comp326-api/controllers/unit.controller';
 
 class UnitRouter extends BaseRouter {
 	route() {
-		this.router.post('/', unitController.createUnit);
-		this.router.get('/', unitController.getUnits);
-		this.router.get('/department/:department', unitController.getDepartmentUnits);
-		this.router.get('/find/:reg', unitController.getUnitByReg);
-		this.router.get('/:id', unitController.getUnitById);
-		this.router.get('/q', unitController.searchUnit);
+		this.router.post('/', loginRequired,unitController.createUnit);
+		this.router.get('/',loginRequired, unitController.getUnits);
+		this.router.get('/department/:department',loginRequired, unitController.getDepartmentUnits);
+		this.router.get('/find/:reg',loginRequired, unitController.getUnitByReg);
+		this.router.get('/:id',loginRequired, unitController.getUnitById);
+		this.router.get('/q',loginRequired, unitController.searchUnit);
 
 		return this.router;
 	}
