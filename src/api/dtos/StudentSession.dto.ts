@@ -43,7 +43,15 @@ export class StudentSessionDto {
 				statusCode: 400,
 			});
 		}
-		if(units&&units.length>0){
+		if (units.length === 0) {
+			throw new ExpressError({
+				data: {},
+				message: 'Units required',
+				status: 'error',
+				statusCode: 400,
+			});
+		}
+		if (units && units.length > 0) {
 			units.forEach((unit) => {
 				if (!validateMongodbId(unit)) {
 					throw new ExpressError({
@@ -55,7 +63,7 @@ export class StudentSessionDto {
 				}
 			});
 		}
-		if(results&&results.length>0){
+		if (results && results.length > 0) {
 			results.forEach((result) => {
 				if (!validateMongodbId(result.unit)) {
 					throw new ExpressError({
@@ -65,7 +73,7 @@ export class StudentSessionDto {
 						statusCode: 400,
 					});
 				}
-				if(!result.score){
+				if (!result.score) {
 					throw new ExpressError({
 						data: {},
 						message: 'Marks required',

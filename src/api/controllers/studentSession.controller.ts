@@ -10,7 +10,7 @@ class StudentSessionController {
 
 	createStudentSession = async (req: IReq, res: IRes, next: INext) => {
 		try {
-			
+
 			const response = await studentSessionService.createStudentSession(req.body);
 
 			return res.status(200).json({ data: response });
@@ -52,10 +52,16 @@ class StudentSessionController {
 		}
 	};
 
-	getStudentSessionByReg = async (req: IReq, res: IRes, next: INext) => {
+	getLecturerUnitRegisteredStudents = async (req: IReq, res: IRes, next: INext) => {
 		try {
-			const response = await studentSessionService.getStudentSessionByReg(
-				req.params.reg,
+			const year = req.query.year
+				? parseInt(req.query.year as string)
+				: 1;
+			const semester = req.query.semester
+				? parseInt(req.query.semester as string)
+				: 1;
+			const response = await studentSessionService.getLecturerUnitRegisteredStudents(
+				req.params.unit, year, semester,
 			);
 
 			return res.status(200).json({ data: response });
@@ -83,6 +89,18 @@ class StudentSessionController {
 		try {
 			const response = await studentSessionService.searchStudentSession(
 				req.query.q as unknown as string,
+			);
+
+			return res.status(200).json({ data: response });
+		} catch (error) {
+			return next(error);
+		}
+	};
+
+	submitSessionResult = async (req: IReq, res: IRes, next: INext) => {
+		try {
+			const response = await studentSessionService.submitSessionResult(
+				req.params.session, req.body
 			);
 
 			return res.status(200).json({ data: response });

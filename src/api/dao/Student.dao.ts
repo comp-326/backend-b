@@ -28,8 +28,10 @@ class StudentDao {
 		const newStudent = await Student.create(
 			student
 		);
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { password: _, ...props } = newStudent._doc;
 
-		return newStudent;
+		return props;
 	};
 
 	updateStudent = async (id: string, student: IStudent) => {

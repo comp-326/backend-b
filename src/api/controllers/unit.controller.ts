@@ -10,7 +10,6 @@ class UnitController {
 
 	createUnit = async (req: IReq, res: IRes, next: INext) => {
 		try {
-			
 			const response = await unitService.createUnit(req.body);
 
 			return res.status(200).json({ data: response });
@@ -52,11 +51,29 @@ class UnitController {
 		}
 	};
 
+	getDepartmentUnits = async (req: IReq, res: IRes, next: INext) => {
+		try {
+			const year = req.query.year
+				? parseInt(req.query.year as string)
+				: 1;
+			const semester = req.query.semester
+				? parseInt(req.query.semester as string)
+				: 1;
+			const response = await unitService.getDepartmentCourses(
+				req.params.department,
+				year,
+				semester,
+			);
+
+			return res.status(200).json({ data: response });
+		} catch (error) {
+			return next(error);
+		}
+	};
+
 	getUnitByReg = async (req: IReq, res: IRes, next: INext) => {
 		try {
-			const response = await unitService.getUnitByReg(
-				req.params.reg,
-			);
+			const response = await unitService.getUnitByReg(req.params.reg);
 
 			return res.status(200).json({ data: response });
 		} catch (error) {

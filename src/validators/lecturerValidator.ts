@@ -1,12 +1,21 @@
 import { ExpressError } from '@comp326-common/errors/ExpressError';
-import { IStudent } from '@comp326-schema/Student.schema';
+import { ILecturer } from 'src/schema/Lecturer.schema';
 import moment from 'moment';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 import { emailRegex, idNumberRegex, phoneRegex } from '@comp326-constants/regex';
 
-export const studentValidator = (student: IStudent) => {
-	const { course, dateOfBirth, email, firstName, lastName, nationalId, password, phone } = student;
-
+export const lecturerValidator = (lecturer: ILecturer) => {
+	const {
+		dateOfBirth,
+		department,
+		email,
+		firstName,
+		lastName,
+		nationalId,
+		password,
+		phone,
+		units,
+	} = lecturer;
 	if (!nationalId) {
 		throw new ExpressError({
 			data: {},
@@ -47,14 +56,6 @@ export const studentValidator = (student: IStudent) => {
 			statusCode: 400,
 		});
 	}
-	if (!email) {
-		throw new ExpressError({
-			data: {},
-			message: 'Email address required',
-			status: 'error',
-			statusCode: 400,
-		});
-	}
 	if (email && !emailRegex.test(email)) {
 		throw new ExpressError({
 			data: {},
@@ -63,18 +64,18 @@ export const studentValidator = (student: IStudent) => {
 			statusCode: 400,
 		});
 	}
-	if (!course) {
+	if (!department) {
 		throw new ExpressError({
 			data: {},
-			message: 'Course required',
+			message: 'Department required',
 			status: 'error',
 			statusCode: 400,
 		});
 	}
-	if (!validateMongodbId(course)) {
+	if (!validateMongodbId(department)) {
 		throw new ExpressError({
 			data: {},
-			message: 'Invalid course id',
+			message: 'Invalid department id',
 			status: 'error',
 			statusCode: 400,
 		});
@@ -111,7 +112,7 @@ export const studentValidator = (student: IStudent) => {
 			statusCode: 400,
 		});
 	}
-	if (!moment(dateOfBirth).isBefore(Date.now())) {
+	if (!moment(new Date(dateOfBirth).getTime()).isBefore(Date.now())) {
 		throw new ExpressError({
 			data: {},
 			message: 'Date cannot come after today date required',
@@ -119,10 +120,36 @@ export const studentValidator = (student: IStudent) => {
 			statusCode: 400,
 		});
 	}
-	if (moment(Date.now()).year() - moment(dateOfBirth).year() < 18) {
+
+	if (units.length === 0 || !Array.isArray(units)) {
 		throw new ExpressError({
 			data: {},
-			message: 'Student must be over 18years old',
+			message: 'Lecturer must be assigned at least 1 unit',
+			status: 'error',
+			statusCode: 400,
+		});
+	}
+	if (!(units.length > 0)) {
+		units.forEach((unit) => {
+			if (!validateMongodbId(unit)) {
+				throw new ExpressError({
+					data: {},
+					message: 'Invalid unit id',
+					status: 'error',
+					statusCode: 400,
+				});
+			}
+		});
+	}
+
+	if (
+		moment(Date.now()).year() -
+        moment(new Date(dateOfBirth).getTime()).year() <
+        18
+	) {
+		throw new ExpressError({
+			data: {},
+			message: 'Lecturer must be over 18years old',
 			status: 'error',
 			statusCode: 400,
 		});
