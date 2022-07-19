@@ -1,4 +1,5 @@
 import { ExpressError } from '@comp326-common/errors/ExpressError';
+import StudentModel from '@comp326-schema/Student.schema';
 import StudentSession, {
 	IStudentSession,
 } from '@comp326-schema/StudentSession.schema';
@@ -11,6 +12,19 @@ class StudentSessionDao {
 
 		return studentSessions;
 	};
+
+	getLecturerUnitRegisteredStudents = async (unit: string, year: number, semester: number) => {
+		const studentSessions = await StudentSession.find({
+			$and: [
+				{ unit: { $in:[unit] } },
+				{ sessionYear: year },
+				{ sessionSemester: semester },
+			]
+		}).populate('student').populate('results').populate('units').populate('results.unit');
+
+		return studentSessions;
+	};
+
 
 	createStudentSession = async (studentSession: IStudentSession) => {
 		const existingStudentSession = await StudentSession.findOne({
@@ -28,7 +42,20 @@ class StudentSessionDao {
 				data: {},
 			});
 		}
+		const student = await StudentModel.findById(studentSession.student);
+		if (!student) {
+			throw new ExpressError({
+				status: 'warning',
+				statusCode: 400,
+				message: 'Student does not exist',
+				data: {},
+			});
+		}
 		const newStudentSession = await StudentSession.create(studentSession);
+
+		await student.updateOne({
+			currentSession: newStudentSession._id,
+		});
 
 		return newStudentSession;
 	};

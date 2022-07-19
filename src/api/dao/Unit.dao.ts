@@ -11,6 +11,21 @@ class UnitDao {
 		return units;
 	};
 
+	getUnitsByDepartment = async (
+		department: string,
+		year: number,
+		semester: number,
+	) => {
+		const units = await Unit.find({
+			department: department,
+			year: year,
+			semester: semester,
+		});
+		const unitIds = units.map((unit) => unit._id);
+
+		return { units, unitIds };
+	};
+
 	createUnit = async (unit: IUnit) => {
 		const existingUnit = await Unit.findOne({
 			$or: [{ code: unit.code }, { name: unit.name }],

@@ -41,7 +41,10 @@ class LecturerDao {
 		}
 		const newLecturer = await Lecturer.create(lecturer);
 
-		return newLecturer;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { password: _, ...props } = newLecturer._doc;
+
+		return props;
 	};
 
 	updateLecturer = async (id: string, lecturer: ILecturer) => {

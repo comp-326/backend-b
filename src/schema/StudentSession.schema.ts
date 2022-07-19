@@ -2,7 +2,7 @@
 import mongoose from '@comp326-db/mongodb';
 
 export interface IStudentSession {
-	student: string;
+	student: any;
 	sessionYear: number;
 	sessionSemester: number;
 	year: number;
@@ -32,7 +32,7 @@ export interface IStudentSessionDocumentModel
 const studentSessionSchema: mongoose.Schema<IStudentSessionDocument> =
 	new mongoose.Schema(
 		{
-			student: { type: String },
+			student: { type: mongoose.Schema.Types.ObjectId, ref: 'student', required: true },
 			sessionYear: { type: Number },
 			sessionSemester: { type: Number },
 			year: { type: Number },

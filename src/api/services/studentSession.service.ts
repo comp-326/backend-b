@@ -2,17 +2,33 @@
 import CDO from '@comp326-api/dao/StudentSession.dao';
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { IStudentSession } from '@comp326-schema/StudentSession.schema';
+import SDO from '@comp326-api/dao/Student.dao';
 import { StudentSessionDto } from '@comp326-api/dtos/StudentSession.dto';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 
 class StudentSessionService {
 	private _studentSessionDao = CDO;
 
+	private _studentDao = SDO;
+
 	protected get studentSessionDao() {
 		return this._studentSessionDao;
 	}
 
+	protected get studentDao() {
+		return this._studentDao;
+	}
+
 	createStudentSession = async (studentSession: IStudentSession) => {
+		const student = await this.studentDao.findStudentById(studentSession.student);
+		if (!student) {
+			throw new ExpressError({
+				data: {},
+				message: `Student ${studentSession.student} not found`,
+				status: 'error',
+				statusCode: 404,
+			});
+		}
 		const newStudentSession = new StudentSessionDto(
 			studentSession.student,
 			studentSession.sessionYear,
@@ -66,9 +82,9 @@ class StudentSessionService {
 		return response;
 	};
 
-	getStudentSessionByReg = async (reg: string) => {
-		const response = await this.studentSessionDao.findStudentSessionByReg(
-			reg,
+	getLecturerUnitRegisteredStudents = async (unit: string, year: number, semester: number) => {
+		const response = await this.studentSessionDao.getLecturerUnitRegisteredStudents(
+			unit, year, semester,
 		);
 
 		return response;

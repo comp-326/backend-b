@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ILecturer } from '@comp326-schema/Lecturer.schema';
 import { generateHudumaNumber } from '@comp326-helpers/hudumaNumber';
-import { lecturerValidator } from 'src/validators/lecturerValidator';
+import { lecturerValidator } from '@comp326-validators/lecturerValidator';
 
 export const lecturerDTO = (lecturer: ILecturer) => {
 

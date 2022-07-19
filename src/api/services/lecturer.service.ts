@@ -2,6 +2,7 @@
 import { ExpressError } from '@comp326-common/errors/ExpressError';
 import { ILecturer } from '@comp326-schema/Lecturer.schema';
 import LDO from '@comp326-api/dao/Lecturer.dao';
+import UDO from '@comp326-api/dao/Unit.dao';
 import { lecturerDTO } from '@comp326-api/dtos/Lecturer.dto';
 import { createStaffRegistrationNumber as reg } from '@comp326-helpers/reg-generator/regGenerator';
 import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
@@ -9,17 +10,40 @@ import validateMongodbId from '@comp326-helpers/validators/validateMongoId';
 class LecturerService {
 	private _lecturerDao = LDO;
 
+	private _unitDao = UDO;
+
 	protected get lecturerDao() {
 		return this._lecturerDao;
 	}
 
+	protected get unitDao() {
+		return this._unitDao;
+	}
+
 	createLecturer = async (lecturer: ILecturer) => {
+
 		const data = await reg();
 		const nl = lecturerDTO({
 			...lecturer,
 			password: data.password,
 			staffId: data.staffId,
 		});
+		const units = nl.getUnits();
+
+		// loop trhrough units and query for each unit if it does not exist throw an error;
+		for (const unit of units) {
+			const unitExists = await this.unitDao.findUnitById(unit);
+			if (!unitExists) {
+				throw new ExpressError({
+					data: {},
+					message: `Unit ${unit} not found`,
+					status: 'error',
+					statusCode: 404,
+				});
+			}
+		}
+
+
 		const res = await this.lecturerDao.createLecturer({
 			dateOfBirth: nl.getDateOfBirth(),
 			department: nl.getDepartment(),
